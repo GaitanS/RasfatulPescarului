@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% block title %}Tutoriale - Pescarul Răsfățat{% endblock %}
+{% block content %}
+    <style>
+        {% for image in section_images %}
+            .{{ image.css_identifier }} {
+                background: url('{{ image.get_image_url }}') no-repeat center center/cover;
+            }
+        {% endfor %}
+    </style>
+    <section class="hero-section" data-aos="zoom-out" data-aos-delay="100" data-aos-duration="1500">
+        <div class="hero-text position-absolute top-50 start-50 translate-middle text-white">
+            <h1 class="display-4 fw-bold">VIDEO TUTORIALE</h1>
+            <p class="lead">VIZUALIZEAZĂ MAI JOS VIDEOURILE CU TEHNICI PROFESIONISTE</p>
+            <a href="{{ club_button.button_link }}" class="btn btn-primary">
+                {{ club_button.button_text }}
+            </a>
+        </div>
+        <div class="waves-container" data-aos="fade-in" data-aos-delay="100" data-aos-duration="1000">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                          d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(222, 244, 252, 0.7"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(222, 244, 252, 0.5)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(222, 244, 252, 0.3)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff"></use>
+                </g>
+            </svg>
+        </div>
+    </section>
+    <section class="categories py-4">
+        <div class="container">
+            <h2 class="text-center mb-4">Categorii</h2>
+            <div class="categories-container">
+                {% for category in categories %}
+                    <button class="category-badge" data-category-id="{{ category.id }}">{{ category.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="video-courses-section py-5">
+        <div class="container">
+            <h2 class="section-title mb-4 text-center">Vizionați și învățați</h2>
+            <div id="videos-container" class="row row-cols-1 row-cols-md-3 g-4">
+                {% for video in videos %}
+                    <div class="col">
+                        <div class="card course-card h-100 shadow-sm">
+                            <div class="card-body">
+                                <div class="ratio ratio-16x9">
+                                    {{ video.iframe_code|safe }}
+                                </div>
+                                <h5 class="card-title mt-3">{{ video.title }}</h5>
+                                <p class="card-text">Canal: {{ video.youtuber_account }}</p>
+                                <small class="text-muted">Adăugat la {{ video.date_added }}</small>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryButtons = document.querySelectorAll(".category-badge");
+            const videosContainer = document.getElementById("videos-container");
+
+            categoryButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const categoryId = this.getAttribute("data-category-id");
+
+                    fetch(`/tutoriale/filter/${categoryId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            videosContainer.innerHTML = ""; // Golește containerul
+                            data.videos.forEach(video => {
+                                const videoCard = `
+                                <div class="col">
+                                    <div class="card course-card h-100 shadow-sm">
+                                        <div class="card-body">
+                                            <div class="ratio ratio-16x9">
+                                                ${video.iframe_code}
+                                            </div>
+                                            <h5 class="card-title mt-3">${video.title}</h5>
+                                            <p class="card-text">Canal: ${video.youtuber_account}</p>
+                                            <small class="text-muted">Adăugat la ${video.date_added}</small>
+                                        </div>
+                                    </div>
+                                </div>`;
+                                videosContainer.insertAdjacentHTML("beforeend", videoCard);
+                            });
+                        });
+                });
+            });
+        });
+    </script>
+
+
+{% endblock %}

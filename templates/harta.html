@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}Harta - Pescarul Rasfatat{% endblock %}
+{% block content %}
+    <style>
+        {% for image in section_images %}
+            .{{ image.css_identifier }} {
+                background: url('{{ image.get_image_url }}') no-repeat center center/cover;
+            }
+        {% endfor %}
+    </style>
+    <section class="hero-section" data-aos="zoom-out" data-aos-delay="100" data-aos-duration="1500">
+        <div class="scroll-down-indicator">
+            <span class="arrow">&#x2193;</span>
+        </div>
+        <div class="hero-text position-absolute top-50 start-50 translate-middle text-white">
+            <h1 class="display-4 fw-bold">SELECTEAZA MAI JOS DATELE</h1>
+            <p class="lead">SĂ MERGEM LA PESCUIT!</p>
+            <a href="{{ club_button.button_link }}" class="btn btn-primary">
+                {{ club_button.button_text }}
+            </a>
+        </div>
+        <!-- Valuri animate -->
+        <div class="waves-container" data-aos="fade-in" data-aos-delay="100" data-aos-duration="1000">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                          d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba( 222, 244, 252,0.7"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba( 222, 244, 252,0.5)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba( 222, 244, 252,0.3)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff"></use>
+                </g>
+            </svg>
+        </div>
+    </section>
+
+    <section class="filter-wheel-section">
+        <div class="wheel-container justify-content-center">
+            <!-- County Dropdown -->
+            <div class="filter-group display-6 text-success">
+                <label for="judet">Județul</label>
+                <select class="wheel rounded" id="judet">
+                    <option value="">Selectează un județ</option>
+                    {% for county in counties %}
+                        <option value="{{ county.id }}">{{ county.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Lake Dropdown -->
+            <div class="filter-group display-6 text-success">
+                <label for="balti">Balți</label>
+                <select class="wheel rounded" id="balti" disabled>
+                    <option value="">Selectează un lac</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <section class="justify-content-center align-center text-center testimonial-section" data-aos="fade-in"
+             data-aos-delay="500" data-aos-duration="1000">
+        <div class="p-1">
+            <p>Selecteaza in lista de sus judetul in care te afli pentru a vedea zonele de pescuit plus ce tipuri de
+                pestii poti gasi
+                in ele.</p>
+        </div>
+        <!-- Div pentru Harta Google Maps Iframe -->
+        <div class="map-container" style="width: 100%; max-width: 100%; margin: 0 auto;">
+            <iframe id="google-map"
+                    src="about:blank"
+                    width="100%"
+                    height="450"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </section>
+
+    <!-- Script JavaScript for Map Update -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const countyDropdown = document.getElementById("judet");
+            const lakesDropdown = document.getElementById("balti");
+
+            // Create a mapping of counties to lakes
+            const countyLakesMap = {
+                {% for county in counties %}
+                    "{{ county.id }}": [
+                        {% for lake in county.lakes.all %}
+                            {
+                                id: "{{ lake.id }}",
+                                name: "{{ lake.name }}",
+                                mapUrl: "{{ lake.google_map_src|default:'' }}"
+                            },
+                        {% endfor %}
+                    ],
+                {% endfor %}
+            };
+
+            // Update lakes dropdown when a county is selected
+            countyDropdown.addEventListener("change", function () {
+                const selectedCountyId = this.value;
+
+                // Clear the lakes dropdown
+                lakesDropdown.innerHTML = '<option value="">Selectează un lac</option>';
+
+                if (selectedCountyId && countyLakesMap[selectedCountyId]) {
+                    // Populate lakes based on selected county
+                    countyLakesMap[selectedCountyId].forEach(lake => {
+                        const option = document.createElement("option");
+                        option.value = lake.mapUrl; // Use map URL as value
+                        option.textContent = lake.name; // Display lake name
+                        lakesDropdown.appendChild(option);
+                    });
+
+                    lakesDropdown.disabled = false; // Enable dropdown
+                } else {
+                    lakesDropdown.disabled = true; // Disable dropdown if no county is selected
+                }
+            });
+
+            // Update Google Map iframe when a lake is selected
+            lakesDropdown.addEventListener("change", function () {
+                const mapUrl = this.value;
+                const googleMap = document.getElementById("google-map");
+
+                if (mapUrl && mapUrl.trim() !== "") {
+                    googleMap.src = mapUrl;
+                    console.log("Map updated to:", mapUrl);
+                } else {
+                    googleMap.src = "about:blank";
+                    console.warn("No valid map URL found for the selected lake.");
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

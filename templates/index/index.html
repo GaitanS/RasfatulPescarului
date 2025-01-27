@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}Acasa - Răsfățul Pescarului{% endblock %}
+{% block content %}
+    <style>
+        {% for image in section_images %}
+            .{{ image.css_identifier }} {
+                background: url('{{ image.get_image_url }}') no-repeat center center/cover;
+            }
+        {% endfor %}
+    </style>
+    <section class="hero-section" data-aos="zoom-out" data-aos-delay="100" data-aos-duration="1500">
+        <div class="hero-text position-absolute top-50 start-50 translate-middle text-white">
+            <h1 class="display-4 fw-bold">SĂ MERGEM LA PESCUIT!</h1>
+            <p class="lead">DEVENIȚI MEMBRU ASTĂZI!</p>
+            <a href="{{ club_button.button_link }}" class="btn btn-primary">
+                {{ club_button.button_text }}
+            </a>
+        </div>
+
+        <!-- Valuri animate -->
+        <div class="waves-container" data-aos="fade-in" data-aos-delay="100" data-aos-duration="800">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                          d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"></path>
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba( 222, 244, 252,0.7"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba( 222, 244, 252,0.5)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba( 222, 244, 252,0.3)"></use>
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff"></use>
+                </g>
+            </svg>
+        </div>
+    </section>
+    <section class="welcome-section">
+        <div class="container d-flex align-items-center">
+            <div class="image-container" data-aos="flip-right" data-aos-delay="300" data-aos-duration="800">
+                <img src="{% static 'images/logo_peste.png' %}" alt="Fishing Image" class="img-fluid">
+            </div>
+            <div class="text-container" data-aos="fade-in" data-aos-delay="700" data-aos-duration="900">
+                <h2>Bine ați venit pe Răsfățul Pescarului </h2>
+                <h4>
+                    Platforma dedicată pasionaților de pescuit din toată țara! Aici, veți descoperi o resursă unică
+                    pentru iubitorii de pescuit: un serviciu inovator care vă permite să explorați toate speciile de
+                    pești și baltițele din România.
+                </h4>
+            </div>
+        </div>
+    </section>
+    <section class="fishing-explore-section" data-aos="fade-in" data-aos-delay="300" data-aos-duration="800">
+        <div class="fishing-explore-container d-flex align-items-center justify-content-between">
+            <div class="fishing-text-content p-5">
+                <h2>Explorați cu noi lumea captivantă a pescuitului.</h2>
+                <p class="fishing-section-description">
+                    Fie că sunteți în căutarea unui loc de pescuit perfect sau doriți să
+                    aflați mai multe despre speciile de pești din apele noastre, Răsfățul Pescarului vă oferă toate
+                    informațiile necesare pentru a vă planifica o experiență de pescuit de neuitat. Alăturați-vă
+                    comunității noastre și începeți aventura pe ape!
+                </p>
+            </div>
+            <div class="fishing-image-container" data-aos="zoom-out" data-aos-delay="500" data-aos-duration="800">
+                <img src="{% static 'images/default.png' %}" alt="Fishing Image">
+            </div>
+        </div>
+    </section>
+    <section class="testimonial-section py-5 border border-success-subtle border-5" data-aos="zoom-out"
+             data-aos-delay="500" data-aos-duration="500">
+        <div class="container justify-content-center">
+            <h2 class="text-center mb-5 ">Testimoniale</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <img src="{% static 'images/img_2.png' %}" class="card-img-top img-fluid"
+                                         alt="Oscar Owens">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Oscar Owens</h5>
+                                        <p class="card-text">
+                                            ★★★★★ <br>
+                                            Nulla quis lorem ut libero malesuada feugiat. Quisque velit nisi, pretium ut
+                                            lacinia in, elementum id enim.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <img src="{% static 'images/img_2.png' %}" class="card-img-top img-fluid"
+                                         alt="Virginia Cortez">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Virginia Cortez</h5>
+                                        <p class="card-text">
+                                            ★★★★☆ <br>
+                                            Curabitur aliquet quam id dui posuere blandit. Lorem ipsum dolor sit amet,
+                                            consectetur adipiscing elit.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card text-center">
+                                    <img src="{% static 'images/img_2.png' %}" class="card-img-top img-fluid"
+                                         alt="Margaret Hayes">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Margaret Hayes</h5>
+                                        <p class="card-text">
+                                            ★★★★★ <br>
+                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna
+                                            justo, lacinia eget consectetur sed, convallis at tellus.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add more carousel items here if needed -->
+                </div>
+                <!-- Carousel controls -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </section>
+    <section class="promo-section border border-success-subtle border-5" data-aos="fade-in" data-aos-delay="300"
+             data-aos-duration="800">
+        <!-- Suprapunerea gradientului -->
+        <div class="promo-overlay"></div>
+
+        <!-- Butonul de redare (Play) -->
+        <a href="{% url 'tutoriale' %}" class="promo-play-button-link">
+            <div class="promo-play-button"></div>
+        </a>
+
+        <!-- Titlul promoțional -->
+        <h2 class="promo-title">Prinde un pește mare alături de noi!
+        </h2>
+
+        <!-- Linie de divizare sub titlu -->
+        <div class="promo-divider"></div>
+
+        <!-- Textul promoțional -->
+        <h1 class="promo-text" id="harta">
+            Descoperă canalul nostru de tutoriale pe YouTube cum poti reusi si tu!
+        </h1>
+    </section>
+    <section
+            class="justify-content-center align-center text-center testimonial-section border border-success-subtle border-5"
+            data-aos="fade-in"
+            data-aos-delay="500" data-aos-duration="1000">
+        <div class="p-1">
+            <h2 class="pt-5">Selecteaza judetul</h2>
+            <p>Selecteaza judeteul in care te afli pentru a vedea zonele de pescuit plus ce tipuri de pestii poti gasi
+                in ele.</p>
+        </div>
+        <div class="map-container">
+            <a href="{% url 'harta' %}">
+                <img src="{% static 'images/romania.svg' %}" alt="Harta României">
+            </a>
+        </div>
+    </section>
+    <section class="deals-section testimonial-section py-5">
+        <div class="container text-center">
+            <h2 class="text-center mb-4">Ofertele Săptămânii</h2>
+            <div class="row justify-content-center">
+                {% for product in products|slice:":4" %}
+                    <div class="col-md-3 col-sm-6 col-12 mb-4">
+                        <div class="card h-100 mx-auto"
+                             style="width: 18rem; border: 1px solid #00c853; border-radius: 10px;">
+                            <a href="{{ product.product_url }}" style="text-decoration: none;">
+                                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.title }}"
+                                     style="cursor: pointer;">
+                            </a>
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ product.title }}</h5>
+                                <p class="card-text">{{ product.category }}</p>
+                                <span class="text-success">{{ product.current_price }} lei</span>
+                                {% if product.old_price %}
+                                    <span class="text-muted text-decoration-line-through">{{ product.old_price }} lei</span>
+                                {% endif %}
+                                <div>
+                                    <a href="{{ product.product_url }}" class="btn btn-success mt-3">Vezi produs</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

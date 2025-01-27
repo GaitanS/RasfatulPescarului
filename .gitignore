@@ -1,0 +1,16 @@
+# Ignoră fișierele de configurare private
+.env
+*.pyc
+__pycache__/
+.idea/
+.vscode/
+
+# Ignoră fișierele virtualenv
+venv/
+env/
+
+# Ignoră fișierele statice (opțional)
+static/
+
+# Ignoră baza de date (opțional)
+db.sqlite3
